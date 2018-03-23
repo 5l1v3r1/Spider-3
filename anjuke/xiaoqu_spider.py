@@ -1,6 +1,7 @@
 import requests
 import copyheaders
 from  lxml import etree
+import time
 import re
 import random
 import time
@@ -18,15 +19,8 @@ class anjuke(object):
 
     def get_list(self,city):#获取该城市的所有地区的url
         area_all_url=[]
-        url='https://{}.anjuke.com/sale/?from=navigation'.format(city)
-        while True:
-            content=self.download_1(url)
-            print('正在尝试连接')
-            time.sleep(3)
-            if content!= None:
-                print("成功")
-                break
-        print("链接成功")
+        url='https://{}.anjuke.com/community/?from=esf_list_navigation'.format(city)
+        content=self.download_1(url)
         selector=etree.HTML(content)
         area_list=selector.xpath('//*[@id="content"]/div[3]/div[1]/span[2]/a/@href')
         for area_url in area_list:
@@ -40,40 +34,23 @@ class anjuke(object):
         print("---------获取所有的url成功-----------")
         return area_all_url
 
-    def download(self,url,retry=0):
+    def download(self,url):
         try:
-            sessions = requests.session()
-            sessions.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36'
-            content = sessions.get(url,
-                                   # proxies=proxt.proxy()
-                                   ).text
-
-            if '访问验证' in content:
-                self.download_1(url, retry)
-                print('---------遭遇验证码---------')
-                if retry > 10:
-                    retry+=1
-                    return None
+            content = requests.get(url,headers=copyheaders.headers_raw_to_dict(headers),
+                                   proxies=proxt.proxy()
+            ).text
             return content
         except :
-            retry += 1
-            self.download_1(url, retry)
-            if retry > 3:
-                return None
-    def download_1(self,url,retry=0):
+            return None
+    def download_1(self,url):
         time.sleep(1)
         try:
-            sessions = requests.session()
-            sessions.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36'
-            content = sessions.get(url,
-                                   # proxies=proxt.proxy()
+            content = requests.get(url,headers=copyheaders.headers_raw_to_dict(headers),
+                                   proxies=proxt.proxy()
                                    ).text
             return content
         except :
-            retry+=1
-            self.download_1(url,retry)
-            if retry>3:
-                return None
+            return None
 
 
 
@@ -84,28 +61,26 @@ class anjuke(object):
                 city=''.join(re.findall('//(.*?).anjuke',complete_url))
                 area=''.join(re.findall('/sale/(.*?)/',complete_url))
                 print('爬去'+city+'的'+area+'的第'+str(i)+'页')
+                time.sleep(random.randint(2,5))
                 content_page=self.download(complete_url)
                 if content_page==None:
                     print('爬取失败')
-                    time.sleep(5)
                     continue
                 selector=etree.HTML(content_page)
                 ever_hotels=selector.xpath('//ul/li/div[2]/div[1]/a/@href')
                 if len(ever_hotels)<10: #如果小于10跳出循环 跳到下个地区
                     print('----------不到50页跳出循环-----------')
-                    time.sleep(5)
                     break
                 self.scraped_ever_hotel(ever_hotels)
 
     def scraped_ever_hotel(self,hotel_page):
-        # pool = Pool(processes=6)
+        pool = Pool(processes=6)
         for item_url in hotel_page:#每个url遍历
-            # pool.apply_async(self.ever_page_, (item_url,))
-            self.ever_page(item_url)
-        # pool.close()
-        # pool.join()
+            pool.apply_async(self.ever_page_, (item_url,))
+        pool.close()
+        pool.join()
     def ever_page_(self,item_url):
-        a=random.randint(1, 2)
+        a=random.randint(1, 3)
         time.sleep(a)
         content = self.download(item_url)
         selector = etree.HTML(content)
@@ -117,9 +92,6 @@ class anjuke(object):
         first_pay = selector.xpath('//div[@class="houseInfo-wrap"]/div/div[3]/dl[3]/dd/text()')
         house_info = selector.xpath('//p[@class="houseInfo"]/text()')
         house_info = ''.join(house_info)
-        if len(house_info)<5:
-            print("------------没有成功抓取-----------------")
-            time.sleep(3)
         house_info = house_info.split('\n')
         print('-----------------------------------------')
         print(house_info[1].replace('\t', ''))
@@ -144,13 +116,10 @@ class anjuke(object):
         with open('second.csv','a') as f:
             f.write(','.join(data)+'\n')
 
-
-
 if __name__ == '__main__':
-    citylist=['jiangmen','zhaoqing']
+    citylist=['shenzhen','foshan','dg','huizhou','zs','zh','jiangmen','zhaoqing']
     S = anjuke()
     for citt in  citylist:
+        time.sleep(5)
         area_all_url = S.get_list(citt)
         S.ever_page(area_all_url)
-
-
