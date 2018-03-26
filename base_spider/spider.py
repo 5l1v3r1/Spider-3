@@ -5,10 +5,10 @@ from requests.exceptions import ReadTimeout
 import urllib.request
 from Throttle import Throttle
 from spidercache import cache
-
+from diskcache import DiskCache
 class base_spider:
 
-    def __init__(self,delay=10,retry=0,cache=None):
+    def __init__(self,delay=10,retry=0,cache=DiskCache()):
         self.retry=retry
         self.throttle = Throttle(delay)
         logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -16,15 +16,17 @@ class base_spider:
         self.cache=cache
         logging.info('start crawl')
 
-    @cache
+    @cache(0)
     def get_content(self,url,header=None,timeout=5,proxies=None,maxretry=5):
 
         s = Session()
         req = Request('GET', url,headers=header)
         prepped = req.prepare()
         try:
+
             resp = s.send(prepped,proxies=proxies,timeout=timeout)
-            return {resp.text,resp.status_code}
+
+            return {'html':resp.content.decode('utf-8'),'code':resp.status_code}
         except exceptions.Timeout as e:
             self.retry += 1
             self.logger.error(str(e)+"try to retry {}".format(self.retry))

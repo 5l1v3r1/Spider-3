@@ -37,7 +37,7 @@ class local_spider(base_spider):
         #                            ','.join([sheet_1.row_values(i)[2],
         #                                      sheet_1.row_values(i)[3]]))
 
-        for i in range(1  ,rows):
+        for i in range(6267  ,rows):
             # print(sheet_1.row_values(i)) #每一列
 
             self.serach_conent(sheet_1.row_values(i)[0],str(sheet_1.row_values(i)[1]).replace('.0',''),','.join([sheet_1.row_values(i)[2],sheet_1.row_values(i)[3]]))
