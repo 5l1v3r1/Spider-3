@@ -8,24 +8,24 @@ from spidercache import cache
 from diskcache import DiskCache
 class base_spider:
 
-    def __init__(self,delay=10,retry=0,cache=DiskCache()):
+    def __init__(self,delay=10,retry=0,header=None,cache=DiskCache(),proxies=None):
         self.retry=retry
         self.throttle = Throttle(delay)
         logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         self.logger = logging.getLogger(__name__)
         self.cache=cache
+        self.proxies=proxies
+        self.header=header
         logging.info('start crawl')
 
     @cache(0)
-    def get_content(self,url,header=None,timeout=5,proxies=None,maxretry=5):
+    def get_content(self,url,timeout=5,maxretry=5):
 
         s = Session()
-        req = Request('GET', url,headers=header)
+        req = Request('GET', url,headers=self.header)
         prepped = req.prepare()
         try:
-
-            resp = s.send(prepped,proxies=proxies,timeout=timeout)
-
+            resp = s.send(prepped,proxies=self.proxies,timeout=timeout)
             return {'html':resp.content.decode('utf-8'),'code':resp.status_code}
         except exceptions.Timeout as e:
             self.retry += 1
@@ -36,7 +36,7 @@ class base_spider:
                 resp=None
                 return resp
             else:
-                self.get_content(url,header,timeout,proxies,maxretry)
+                self.get_content(url,self.header,timeout,self.proxies,maxretry)
 
         except exceptions.HTTPError as e:
             self.retry += 1
@@ -47,18 +47,18 @@ class base_spider:
                 resp = None
                 return resp
             else:
-                self.get_content(url, header, timeout, proxies, maxretry)
+                self.get_content(url, self.header, timeout, self.proxies, maxretry)
 
         except exceptions.ConnectionError as e:
             self.retry += 1
-            self.logger.error(str(e) + "try to retry {}".format(self.retry))
+            self.logger. error(str(e) + "try to retry {}".format(self.retry))
             if self.retry >= maxretry:
                 self.logger.error("retry =5 return None".format(self.retry))
                 self.retry = 0
                 resp = None
                 return resp
             else:
-                self.get_content(url, header, timeout, proxies, maxretry)
+                self.get_content(url, self.header, timeout, self.proxies, maxretry)
 
     def report(self,count, blockSize, totalSize):
             percent = int(count * blockSize * 100 / totalSize)

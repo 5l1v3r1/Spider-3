@@ -117,7 +117,7 @@ class anjuke(object):
             f.write(','.join(data)+'\n')
 
 if __name__ == '__main__':
-    citylist=['shenzhen','foshan','dg','huizhou','zs','zh','jiangmen','zhaoqing']
+    citylist=['shenzhen','dg','huizhou','zs','zh','jiangmen','zhaoqing']
     S = anjuke()
     for citt in  citylist:
         time.sleep(5)

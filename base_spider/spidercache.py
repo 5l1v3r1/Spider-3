@@ -11,10 +11,10 @@ def cache(cachetime):
             result = None
             son_obj = args[0]
             url = args[1]
+            header=son_obj.header
+
             if son_obj.cache:
                 try:
-
-
                     son_obj.logger.info(url+' read cache')
                     result = son_obj.cache[url]
 
@@ -24,7 +24,7 @@ def cache(cachetime):
             if result is None:
                 son_obj.throttle.wait(url)
                 son_obj.logger.info('get content from internet')
-                result = son_obj.get_content.__wrapped__(son_obj, url)
+                result = son_obj.get_content.__wrapped__(son_obj, url,header)
                 if son_obj.cache:
                     son_obj.cache[url] = result
 
