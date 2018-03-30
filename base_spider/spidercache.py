@@ -1,7 +1,7 @@
 import hashlib
 import os
 from functools import wraps
-import codecs
+import log
 import time
 
 def cache(cachetime):
@@ -15,15 +15,15 @@ def cache(cachetime):
 
             if son_obj.cache:
                 try:
-                    son_obj.logger.info(url+' read cache')
+                    log.mylogging().info(url+' read cache')
                     result = son_obj.cache[url]
 
                 except KeyError as e:
-                    print(e)
+                    log.mylogging().info(e)
 
             if result is None:
                 son_obj.throttle.wait(url)
-                son_obj.logger.info('get content from internet')
+                log.mylogging().info('get content from internet')
                 result = son_obj.get_content.__wrapped__(son_obj, url,header)
                 if son_obj.cache:
                     son_obj.cache[url] = result
