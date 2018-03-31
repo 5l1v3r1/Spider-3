@@ -1,6 +1,6 @@
 from  multiprocessing import Process
 import multiprocessing
-from  Mongoqueue import MongoQueue
+
 import time
 def Cosumer(process_num=4,callback=None,args=()):
     processes=[]
@@ -12,18 +12,3 @@ def Cosumer(process_num=4,callback=None,args=()):
         p.join()
 
 
-def aaa(num):
-    a=MongoQueue()
-
-    while True:
-        time.sleep(0.1)
-        # try:
-        url=a.pop()
-        print(url)
-        # except KeyError as e:
-
-        # else:
-        #     a.complete(url)
-if __name__ == '__main__':
-
-    c=Cosumer(process_num=4,callback=aaa,args=(1,))

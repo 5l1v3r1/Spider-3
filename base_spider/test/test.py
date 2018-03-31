@@ -1,6 +1,6 @@
-from spider import  base_spider
+import spider
 
-class dd(base_spider):
+class dd(spider.base_spider):
 
     def get(self):
 
@@ -10,5 +10,5 @@ class dd(base_spider):
 header = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
         }
-a=dd(3,header)
+a=dd(3,header,cache=None)
 a.get()

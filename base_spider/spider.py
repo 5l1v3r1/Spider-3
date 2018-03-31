@@ -3,15 +3,15 @@ from requests import Session,Request,exceptions
 import logging,sys,math
 from requests.exceptions import ReadTimeout
 import urllib.request
-from Throttle import Throttle
+import Throttle
 from spidercache import cache
-from diskcache import DiskCache
+from  diskcache import DiskCache
 import log
 class base_spider:
 
     def __init__(self,delay=10,retry=0,header=None,cache=DiskCache(),proxies=None):
         self.retry=retry
-        self.throttle = Throttle(delay)
+        self.throttle = Throttle.Throttle(delay)
         self.cache=cache
         self.proxies=proxies
         self.header=header
@@ -66,7 +66,7 @@ class base_spider:
             sys.stdout.flush()
 
     def down_load_imge_video(self,url,path):
-        log.mylogging.info("start to download")
+        log.mylogging().info("start to download")
         urllib.request.urlretrieve(url,path,reporthook=self.report)
         log.mylogging().info("download ok!")
 

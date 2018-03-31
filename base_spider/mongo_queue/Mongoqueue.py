@@ -1,6 +1,7 @@
 from pymongo import MongoClient,errors
 from datetime import datetime ,timedelta
-
+import log
+import time
 class MongoQueue:
 
     OUTSTANDING,PROCESSING,COMPLETE=range(3)
@@ -29,7 +30,9 @@ class MongoQueue:
         if record:
             return record['_id']
         else:
-            raise KeyError
+            log.mylogging().warning("not found url in queue")
+            time.sleep(5)
+            return None
 
     def complete(self,url):
         self.db.crawl_queue.update(
@@ -48,6 +51,4 @@ class MongoQueue:
         if record:
             print('Released:',record)
 
-a=MongoQueue()
-for i in range(1000):
-    a.push('wwww.baidu.com/{}'.format(i))
+
