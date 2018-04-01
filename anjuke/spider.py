@@ -40,12 +40,13 @@ class anjuke(object):
         print("---------获取所有的url成功-----------")
         return area_all_url
 
-    def download(self,url,retry=0):
+    def download(self,url,retry=0,timeout=5):
         try:
             sessions = requests.session()
             sessions.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36'
             content = sessions.get(url,
                                    # proxies=proxt.proxy()
+                                   timeout=timeout
                                    ).text
 
             if '访问验证' in content:
@@ -60,13 +61,14 @@ class anjuke(object):
             self.download_1(url, retry)
             if retry > 3:
                 return None
-    def download_1(self,url,retry=0):
+    def download_1(self,url,retry=0,timeout=5):
         time.sleep(1)
         try:
             sessions = requests.session()
             sessions.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36'
             content = sessions.get(url,
                                    # proxies=proxt.proxy()
+                                   timeout=timeout
                                    ).text
             return content
         except :
@@ -78,9 +80,12 @@ class anjuke(object):
 
 
     def ever_page(self,urls):
+        # print(urls)
         for url in  urls:#遍历每个城市的地区
+            # print(url)
             for i in range(1,50):
                 complete_url=url+'p{}/'.format(i)
+                # print(complete_url)
                 city=''.join(re.findall('//(.*?).anjuke',complete_url))
                 area=''.join(re.findall('/sale/(.*?)/',complete_url))
                 print('爬去'+city+'的'+area+'的第'+str(i)+'页')
@@ -91,6 +96,7 @@ class anjuke(object):
                     continue
                 selector=etree.HTML(content_page)
                 ever_hotels=selector.xpath('//ul/li/div[2]/div[1]/a/@href')
+
                 if len(ever_hotels)<10: #如果小于10跳出循环 跳到下个地区
                     print('----------不到50页跳出循环-----------')
                     time.sleep(5)
@@ -101,7 +107,7 @@ class anjuke(object):
         # pool = Pool(processes=6)
         for item_url in hotel_page:#每个url遍历
             # pool.apply_async(self.ever_page_, (item_url,))
-            self.ever_page(item_url)
+            self.ever_page_(item_url)
         # pool.close()
         # pool.join()
     def ever_page_(self,item_url):
@@ -141,13 +147,13 @@ class anjuke(object):
                       ]
         self.write_to_csv(house_data)
     def write_to_csv(self,data):
-        with open('second.csv','a') as f:
+        with open('ers.csv','a') as f:
             f.write(','.join(data)+'\n')
 
 
 
 if __name__ == '__main__':
-    citylist=['jiangmen','zhaoqing']
+    citylist=['foshan','zh']
     S = anjuke()
     for citt in  citylist:
         area_all_url = S.get_list(citt)
