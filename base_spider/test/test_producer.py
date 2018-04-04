@@ -1,6 +1,6 @@
-from  mongo_queue.Producer import Producer
-from mongo_queue.Mongoqueue import MongoQueue
-from mongo_queue.Cosumer import Cosumer
+from  Spider.base_spider.mongo_queue.Producer import Producer
+from Spider.base_spider.mongo_queue.Mongoqueue import MongoQueue
+from Spider.base_spider.mongo_queue.Cosumer import Cosumer
 import time
 def aaa(num):
     print(num)

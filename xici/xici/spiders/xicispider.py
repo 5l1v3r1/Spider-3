@@ -9,7 +9,7 @@ class XiciSpider(scrapy.Spider):
     allowed_domains = ['www.xicidaili.com']
     def start_requests(self):
 
-        for i in  range(1,3):
+        for i in  range(1,5):
             # print('http://www.xicidaili.com/nn/{page}'.format(page=i))
             # yield Request('http://www.xicidaili.com/nn/{page}'.format(page=i))
             yield  Request('http://www.xicidaili.com/nn/%s'%i)
@@ -26,7 +26,7 @@ class XiciSpider(scrapy.Spider):
             meta={
                 'proxy':proxy,
                 'dont_retry':True,
-                'download_timeout':5,
+                'download_timeout':3,
 
                 '_proxy_ip':ip,
                 '_scheme_':scheme
