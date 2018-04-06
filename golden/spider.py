@@ -4,7 +4,7 @@ class spider(base_spider):
     def get(self):
         a=time.time()
         for i in range(1,10):
-            con = self.get_content('https://www.jinfuzi.com/simu/list_d5_w1_p{}.html'.format(i))['html']
+            con = self.get_content('https://www.jinfuzi.com/simu/list_d4_w1_p{}.html'.format(i))['html']
             print(len(con))
         print(time.time()-a)
 
@@ -13,4 +13,5 @@ header = {
 }
 if __name__ == '__main__':
     S=spider(header=header)
+    aaaaaa
     S.get()

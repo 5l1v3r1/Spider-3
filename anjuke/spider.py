@@ -5,7 +5,7 @@ import re
 import random
 import time
 from multiprocessing import Pool
-from anjuke import proxt
+# from anjuke import proxt
 headers=b'''accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
 accept-encoding:gzip, deflate, br
 accept-language:zh,en-US;q=0.9,en;q=0.8
@@ -153,7 +153,7 @@ class anjuke(object):
 
 
 if __name__ == '__main__':
-    citylist=['foshan','zh']
+    citylist=['zh']
     S = anjuke()
     for citt in  citylist:
         area_all_url = S.get_list(citt)
