@@ -4,7 +4,7 @@ class dd(Spider.base_spider.spider.base_spider):
 
     def get(self):
 
-        con = self.get_content('https://www.jinfuzi.com/simu/list_d2_w1_p3.html')['html']
+        con = self.get_content('https://list.tmall.com/chaoshi_data.htm?p=1&user_id=725677994&cat=51454011&sort=td&from=chaoshi')['html']
         print(len(con))
 
 header = {
