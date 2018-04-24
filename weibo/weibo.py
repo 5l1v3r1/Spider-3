@@ -2,40 +2,59 @@ import requests
 from requests.exceptions import ReadTimeout,HTTPError,RequestException
 import re
 import time
+# import proxy
+from multiprocessing import Pool
+def download(url):
+    header={
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
+    }
+    try:
+        # proxies=proxy.retun_proxy()
+
+        html_json=requests.get(url,
+                               # proxie
+                               headers=header,
+                               ).json()
+        return html_json
+    except:
+        pass
+
+def get_weibo_id():
+    for i in range(1,22):
 
 
-def sina():
-    headers = {}
-    headers['User-Agent'] = 'Mozilla/5.0 ' \
-                          '(Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 ' \
-                          '(KHTML, like Gecko) Version/5.1 Safari/534.50'
+            html_json=download("https://m.weibo.cn/api/container/getIndex?type=uid&value=1223178222&containerid=1076031223178222&page={}".format(i))
 
 
-    ii = 0
-    while ii <10000:
-        ii = ii + 1
-        url = 'https://m.weibo.cn/api/comments/show?id=4171979403983768&page='+str(ii)
-        html = requests.get(url, headers=headers)
-        # html = requests.get(url,headers=headers,proxies=proxies)
+            id_list=html_json["data"]['cards']
+            # print(html_json)
+            for id in id_list:
+                print(id["itemid"])
+                id=id["itemid"][-16:]
+                url="https://m.weibo.cn/api/comments/show?id={}&page=".format(id)
+                get_comments(url)
 
-        try:
-            for jj in range(0,len(html.json()['data']['data'])):
-                # print(html.json()['data']['data'][jj]['text'])
-                data = html.json()['data']['data'][jj]['text']
-                print( ''.join(re.findall('[\u4300-\u9fa5]',data)))
-                # with open('E:\\Graduation design\\gd\\sina_data\\weibo5.txt','a',encoding='utf-8') as ff:
-                #     hanzi = ''.join(re.findall('[\u4300-\u9fa5]',data))
-                #     # print(str(hanzi))
-                #     ff.write(str(hanzi)+'\n')
-        except ReadTimeout:
-            print('time out')
+def get_comments(url):
+    pool=Pool(processes=4)
 
-        except HTTPError:
-            print('htt perror')
+    for i in range(1,51):
+        pool.apply_async(print_, (url,i,))
+def print_(url,i):
+    try:
+        format_url = url + str(i)
+        commit_json = download(format_url)
+        commit_list = commit_json['data']['data']
 
-        except RequestException:
-            print('request error')
+        for commit in commit_list:
+            screen_name = commit['user']['screen_name']
+            commit = commit["text"]
+            frist = re.sub("<span.*?</span>", "", commit)
+            second = re.sub("<a.*?</a>", "", frist)
 
-        time.sleep(2)
+            print(second)
+            print(screen_name)
+    except:
+        print(url + str(i))
 
-sina()
+if __name__ == '__main__':
+    get_weibo_id()
