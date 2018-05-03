@@ -1,10 +1,7 @@
 import requests
-from requests.exceptions import ReadTimeout, HTTPError, RequestException
 import re
 import time
-import proxy
 import pymysql
-from multiprocessing import Pool
 conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='weibo', charset='utf8')
 cursor = conn.cursor()
 #链接数据库
@@ -52,7 +49,7 @@ def get_weibo_id():
                 comments_count=id_count['mblog']['comments_count']
                 reposts_count = id_count['mblog']["reposts_count"]
                 created_at=id_count['mblog']["created_at"]
-                text = ''.join(re.findall(r'[\u4e00-\u9fa5]+', text))#微博内容
+                text = ''.join(re.findall(r'[\u4e00-\u9fa5]+', text))#微博内容 #正则提取汉字
             except:
                 comments_count=0
                 like_count=0
@@ -63,7 +60,7 @@ def get_weibo_id():
             print(text)
             print("---------------------------------")
 
-            url = "https://m.weibo.cn/api/comments/show?id={}&page=".format(id)
+            url = "https://m.weibo.cn/api/comments/show?id={}&page=".format(id) #根据ID 构建url
             sql="INSERT original VALUES('%s','%d','%d','%d','%s')"%(text,int(like_count),int(reposts_count),int(comments_count),created_at)
             insert_to_db(sql)#插入数据库
             get_comments(url,text)
@@ -86,7 +83,7 @@ def print_(url, i,text):
             print("没有评论")
             pass
         else:
-            try:#获取评论信息
+            try:    #获取评论信息
                 commit_list = commit_json['data']['data']
                 for commit in commit_list:
                     created_at = commit["created_at"]
@@ -95,7 +92,7 @@ def print_(url, i,text):
                     commit = commit["text"]
 
                     frist = re.sub("<span.*?</span>", "", commit)
-                    commit_text = re.sub("<a.*?</a>", "", frist)
+                    commit_text = re.sub("<a.*?</a>", "", frist)#去除无关的信息
 
                     print(screen_name)  # 名字
                     print(commit_text)  # 评论内容
@@ -105,10 +102,6 @@ def print_(url, i,text):
                     insert_to_db(sql)
             except KeyError as e:
                 print(e)
-
-
-
-
 
 
 def insert_to_db(sql): #插入数据库

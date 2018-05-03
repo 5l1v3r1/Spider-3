@@ -1,11 +1,18 @@
 import requests
 import re
 import pymysql
+from fake_useragent import UserAgent
+import lxml
 from lxml import etree
-header = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
-    # 'Cookie': 's_ViewType=10; _lxsdk_cuid=162d7c8a08ec8-06574899d6d2f2-3a614f0b-1fa400-162d7c8a08ec8; _lxsdk=162d7c8a08ec8-06574899d6d2f2-3a614f0b-1fa400-162d7c8a08ec8; _hc.v=0d0a6c6c-835b-e634-730c-4861e6dd7e9c.1524038673; cy=258; cye=guiyang; __utmz=1.1524041034.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); thirdtoken=8C4ED196C7CE8D362A03346FED4A2A04; JSESSIONID=3591B15133B62DB142A213FA0386C5F4; _thirdu.c=62528643ab77e5f146542a0d511817c4; dper=e5b5aa8cba5ad90edcbd56145582c4ee5aa79b399a8e623e94f8630af3d27c49; ll=7fd06e815b796be3df069dec7836c3df; ua=dpuser_1222058167; ctu=12a017cea659512d0c8b94961d2e13e43d190551dc80235b2ac37b11158f15f6; _lx_utm=utm_source%3DBaidu%26utm_medium%3Dorganic; _lxsdk_s=162dbadbd74-35d-80a-568%7C%7C499'
+import proxy
+header_shop = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299',
 }#浏览器头
+ua=UserAgent()
+
+
+
+
 # conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='dazhong', charset='utf8')
 # cursor = conn.cursor()
 # cursor.execute('USE dazhong')#链接数据库
@@ -18,7 +25,7 @@ def get_content():
     list=['g105','g110','g132','g111']#遍历四个标签
     for j in  list:
         for i in range(1, 51):#遍历每一页
-            content = requests.get('http://www.dianping.com/guiyang/ch10/{}p{}'.format(j,i), headers=header).text
+            content = requests.get('http://www.dianping.com/guiyang/ch10/{}p{}'.format(j,i), headers=header_shop).text
             parse_content(content)
 
 
@@ -41,56 +48,79 @@ def parse_content(content):
         )#sql语句
         # instert_to_bd(sql)
         ID=''.join(re.findall("(\d+)",url))
-        commit_content(ID)#插入
+        print(ID)
+        commit_content(ID,name)
 
 
-def commit_content(ID): #获取评论的函数
-    url = 'http://www.dianping.com/shop/{}'.format(ID)
-    content = requests.get(url, headers=header).text
+def commit_content(ID,name): #获取评论的函数
+        for i in range(1,20):
+            print(name)
+            url = 'http://www.dianping.com/shop/{}/review_all/p{}'.format(ID,i)
+            # print(url)
+            header_comment = {
+                'User-Agent': ua.random,
+                'Cookie':'_lxsdk_cuid=163057e2d4fc8-03370d242f56b8-7c117d7e-1fa400-163057e2d4fc8; _lxsdk=163057e2d4fc8-03370d242f56b8-7c117d7e-1fa400-163057e2d4fc8; _hc.v=8cd08b53-f19b-6289-b239-4ef97a2b76b5.1524805545; dper=e5b5aa8cba5ad90edcbd56145582c4ee31ed97e633d1b8cb40a1a946cb2549d7; ll=7fd06e815b796be3df069dec7836c3df; ua=%E5%92%B8%E7%B3%96_8951; ctu=12a017cea659512d0c8b94961d2e13e41cca89bd5be8c472b9f196ec6d9a228b; uamo=15868759135; cy=101; cye=wenzhou; s_ViewType=10; _lx_utm=utm_source%3DBaidu%26utm_medium%3Dorganic; _lxsdk_s=163057e2d54-8c1-82e-dfe%7C%7C1975'
+            }
+            # print(header_comment)
+            content = requests.get(url, headers=header_comment,proxies=proxy.return_()).text
+            if(len(content)==0):
+                continue
+            selector= etree.HTML(content)
+
+            sel = selector.xpath('//div[@class="reviews-items"]/ul/li')
+            if (len(sel)>2):
+                for item in sel:
+                    user_id=''.join(item.xpath('./a/@data-user-id'))
+                    print(user_id)
+            else:
+                print(name,"跳出循环")
+                break
+
+        # if len(sel)>10:
+        #     for item in sel:
+        #         ID_user = item.xpath("./a/@data-user-id")
+        #         print(ID_user)
+
+
     # print(content)
-    selector = etree.HTML(content)
-    sel=selector.xpath('//div[@id="comment"]/ul/li')
-    # print(len(sel))
-    for item in sel:#先定位标签为列表
-        #解析标签中所有需要的元素
-        id=''.join(item.xpath('./a/@data-user-id'))
-        time=''.join(item.xpath('./div[@class="content"]/div[@class="misc-info"]/span[@class="time"]/text()'))
-        #//*[@id="rev_411659869"]/div/div[1]/p#//*[@id="rev_410272490"]/div/div[1]/p/text()[1]
-        # commit=item.xpath('./div/div[1]/p/text()')
-        data=''.join(item.xpath('./div')[0].xpath('string(.)'))
-        # print(data)
-        taste=''.join(re.findall("口味：(.*?) 环境",data))
-        enviroment = ''.join(re.findall("环境：(.*?) 服务", data))
-        service=''.join(re.findall("服务：(.*?) ",data))
-
-        overall_rating =(''.join(re.findall('\d+', ''.join(item.xpath('./div/p[1]/span[1]/@class')))).replace('0',''))
-        try:
-            coment =re.sub('：(.*?)  ','',re.findall("服务(.*?) 赞",data)[0])
-        except:
-            coment=''
-
-        sql = "INSERT INTO comment VALUES ('{ID}', '{time}', '{coment}', '{service}', '{enviroment}','{taste}','{overall_rating}')".format(
-            ID=id, time=time,
-            coment=coment, service=service, enviroment=enviroment,
-            taste=taste,overall_rating=overall_rating
-        )#sql语句
-        # instert_to_bd(sql)#插入数据库
-        print(sql)
 
 
+        # time=''.join(item.xpath('./div[@class="content"]/div[@class="misc-info"]/span[@class="time"]/text()'))
+        #
+        # data=''.join(item.xpath('./div')[0].xpath('string(.)'))
+        #
+        # taste=''.join(re.findall("口味：(.*?) 环境",data))
+        # enviroment = ''.join(re.findall("环境：(.*?) 服务", data))
+        # service=''.join(re.findall("服务：(.*?) ",data))
+        #
+        # overall_rating =(''.join(re.findall('\d+', ''.join(item.xpath('./div/p[1]/span[1]/@class')))).replace('0',''))
+        # try:
+        #     coment =re.sub('：(.*?)  ','',re.findall("服务(.*?) 赞",data)[0])
+        # except:
+        #     coment=''
 
-def instert_to_bd(sql): #插入数据库
-        try:
-            cursor.execute(sql)
-            conn.commit()
-        except pymysql.err.IntegrityError as e:
-            pass
-        except pymysql.err.ProgrammingError as  ex:
-            pass
-        else:
-            print("写入成功")
+        # sql = "INSERT INTO comment VALUES ('{ID}', '{time}', '{coment}', '{service}', '{enviroment}','{taste}','{overall_rating}')".format(
+        #     ID=id, time=time,
+        #     coment=coment, service=service, enviroment=enviroment,
+        #     taste=taste,overall_rating=overall_rating
+        # )#sql语句
+        # # instert_to_bd(sql)#插入数据库
+        # print(sql)
+
+
+#
+# def instert_to_bd(sql): #插入数据库
+#         try:
+#             cursor.execute(sql)
+#             conn.commit()
+#         except pymysql.err.IntegrityError as e:
+#             pass
+#         except pymysql.err.ProgrammingError as  ex:
+#             pass
+#         else:
+#             print("写入成功")
 
 
 
 get_content()
-conn.close()
+# conn.close()
