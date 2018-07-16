@@ -10,4 +10,7 @@ cookie.save(ignore_discard=True, ignore_expires=True)
 
 cookie2= cookiejar.MozillaCookieJar()
 cookie2.load('cookie.txt', ignore_discard=True, ignore_expires=True)
-req = request
+req = request.Request('http://www.baidu.com')
+opener = request.build_opener(request.HTTPCookieProcessor(cookie2))
+response_ =opener.open(req)
+print(response.read())
