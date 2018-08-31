@@ -1,17 +1,18 @@
 ## 爬虫合集 所有的爬虫脚本 
 
-* 安居客
-* b站
-* 豆瓣
-* 金斧子
-* 黑龙江招标网
-* 京东
-* 链家网
-* 贷款app 
-* 美团
-* 淘宝
-* 微博
-* 西刺
-* 知乎
-* 大众点评
-*  [破解js加密](https://github.com/xiantang/Spider/tree/master/Anti_Anti_Spider_521)
+* [安居客](https://github.com/xiantang/Spider/tree/master/anjuke)
+* [b站](https://github.com/xiantang/Spider/blob/master/bilibili/bilibili.py)
+* [豆瓣](https://github.com/xiantang/Spider/blob/master/douban/douban_movie.py)
+* [黑龙江招标网](https://github.com/xiantang/Spider/blob/master/HeiongjiangBids/requests_script.py)
+* [链家网](https://github.com/xiantang/Spider/tree/master/lianjia)
+* [贷款app](https://github.com/xiantang/Spider/blob/master/loanApp/daikuan.py) 
+* [美团差评](https://github.com/xiantang/Spider/tree/master/meituanbad)
+* [淘宝登录](https://github.com/xiantang/Spider/blob/master/TaoBaoLogin/taobaospider.py)
+* [淘宝店铺](https://github.com/xiantang/Spider/blob/master/TaoBaoShop/sell.py)
+* [微博](https://github.com/xiantang/Spider/tree/master/weibo)
+* [西刺](https://github.com/xiantang/Spider/tree/master/xici)
+* [知乎问题](https://github.com/xiantang/Spider/tree/master/zhihuq)
+* [推特](https://github.com/xiantang/Spider/blob/master/TweetApi/tweet.py)
+* [大众点评](https://github.com/xiantang/Spider/tree/master/rabbr)
+* [unitedstateszipcodes](https://github.com/xiantang/Spider/blob/master/excel_local/local_spider.py)
+* [破解js加密](https://github.com/xiantang/Spider/tree/master/Anti_Anti_Spider_521)
