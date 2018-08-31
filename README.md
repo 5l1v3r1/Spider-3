@@ -14,3 +14,4 @@
 * 西刺
 * 知乎
 * 大众点评
+*  [破解js加密](https://github.com/xiantang/Spider/tree/master/Anti_Anti_Spider_521)
