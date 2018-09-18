@@ -9,6 +9,7 @@
 * [美团差评](https://github.com/xiantang/Spider/tree/master/meituanbad)
 * [淘宝登录](https://github.com/xiantang/Spider/blob/master/TaoBaoLogin/taobaospider.py)
 * [淘宝店铺](https://github.com/xiantang/Spider/blob/master/TaoBaoShop/sell.py)
+* [天猫](https://github.com/xiantang/Spider/tree/master/tmail)
 * [微博](https://github.com/xiantang/Spider/tree/master/weibo)
 * [西刺](https://github.com/xiantang/Spider/tree/master/xici)
 * [知乎问题](https://github.com/xiantang/Spider/tree/master/zhihuq)
