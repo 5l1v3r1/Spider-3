@@ -7,7 +7,7 @@ import pymysql
 
 import traceback
 
-conn = pymysql.connect("111.231.255.225",
+conn = pymysql.connect("url",
                                     "root", "123456", "product")
 cursor = conn.cursor()
 def download(img_name,img_url):

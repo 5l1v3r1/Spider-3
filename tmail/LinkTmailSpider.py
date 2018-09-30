@@ -50,13 +50,13 @@ class LinkTmailSpider():
         self.all_url_list()
 
 if __name__ == '__main__':
-    statr_url = [
+    stat_url = [
             "https://pages.tmall.com/wow/yao/17473/baojianzibu",
             "https://pages.tmall.com/wow/yao/act/711jf",
             "https://pages.tmall.com/wow/yao/act/999",
             "https://pages.tmall.com/wow/yao/act/aljkdyf-fuke",
             "https://miao.tmall.com/"
         ]
-    ts = LinkTmailSpider(statr_url)
+    ts = LinkTmailSpider(stat_url)
     ts.all_url_list()
 # driver.quit()
