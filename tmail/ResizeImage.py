@@ -11,5 +11,6 @@ for file in image_path:
         im = Image.open(file).convert('RGB')
         im.thumbnail((800,800))
         im.save(name,"JPEG")
+        
     except Exception as e:
         print(e)
