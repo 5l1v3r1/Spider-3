@@ -15,11 +15,8 @@ def get_from_excel():
     rows = sheet_1.nrows
     fromlist = sheet_1.row_values(0)
     not_found_list=[]
-<<<<<<< HEAD
-    for i in range(1, 1200):#列
-=======
     for i in range(11, rows):#列
->>>>>>> 5df63b01d9c53cb43fac9a2cab6bb1c28b8f803c
+
         # print(sheet_1.row_values(i))
         for j in range(1,len(sheet_1.row_values(i))):#行
             # print(sheet_1.row_values(i)[j])
@@ -27,7 +24,7 @@ def get_from_excel():
                 tocity = sheet_1.row_values(i)[1]
                 form_city=sheet_1.row_values(0)[j]
                 not_found_list.append([i,j,tocity,form_city])
-<<<<<<< HEAD
+
     # print(not_found_list)
     print(len(not_found_list))
     pool=Pool(processes=8)
@@ -53,13 +50,7 @@ def get_content(i,j,from_city,tocity):
         # pool.join()
 def get_content(i,j,from_city,tocity):
 
->>>>>>> 5df63b01d9c53cb43fac9a2cab6bb1c28b8f803c
 
-        driver = webdriver.Chrome(r'C:\Program Files (x86)\Google\Chrome\Application\chromedriver.exe')
-        driver.set_page_load_timeout(40)
-        # driver.get('http://www.distancebetweencities.us/result.php?fromplace={}&toplace={}'.format(from_city,tocity))
-
-<<<<<<< HEAD
         driver = webdriver.Chrome(r'C:\Program Files (x86)\Google\Chrome\Application\chromedriver.exe')
         driver.set_page_load_timeout(40)
         # driver.get('http://www.distancebetweencities.us/result.php?fromplace={}&toplace={}'.format(from_city,tocity))
@@ -72,7 +63,7 @@ def get_content(i,j,from_city,tocity):
         goto_.send_keys(tocity)
         submit = driver.find_element_by_id('hae')
         submit.click()
-=======
+
         # driver = webdriver.Chrome(r'C:\Program Files (x86)\Google\Chrome\Application\chromedriver.exe')
         driver.get('https://www.distancefromto.net/')
         from_ = driver.find_element_by_id('distancefrom')
@@ -81,8 +72,6 @@ def get_content(i,j,from_city,tocity):
         goto_.send_keys(tocity)
         submit = driver.find_element_by_id('hae')
         submit.click()
-
->>>>>>> 5df63b01d9c53cb43fac9a2cab6bb1c28b8f803c
         time.sleep(3)
         distance=driver.find_element_by_id('totaldistancekm').get_attribute('value')
         print(distance)
