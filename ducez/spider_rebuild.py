@@ -111,7 +111,7 @@ def main():
             # ))
 
             for comment in post_data["comments"]:
-                comment_str = "{content_id}\t{user_name}\t{user_id}"\
+                comment_str = "{content_id}@{user_id}@{user_name}"\
                     .format(content_id = comment["content_id"],
                             user_name = comment["user_name"],
                             user_id = comment["user_id"])
