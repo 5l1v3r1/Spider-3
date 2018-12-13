@@ -38,7 +38,7 @@ class WebRequest(object):
             'Accept-Language': 'zh-CN,zh;q=0.8'
         }
 
-    def get(self,url,header=None,retry_time=5,timeout=5,retry_flag=list(),
+    def get(self,url,header=None,retry_time=2,timeout=5,retry_flag=list(),
             retry_interval=5,*args,**kwargs):
 
         '''
