@@ -1,4 +1,4 @@
-## 爬虫合集 所有的爬虫脚本 
+## 所有的爬虫脚本 
 
 * [安居客](https://github.com/xiantang/Spider/tree/master/anjuke)
 * [b站](https://github.com/xiantang/Spider/blob/master/bilibili/bilibili.py)
