@@ -65,5 +65,5 @@ class Login(object):
 if __name__ == "__main__":
     login = Login()
     # 输入自己email账号和密码
-    session = login.login(email='zhujingdi1998@gmail.com', password='19980424zjd.')
+    session = login.login(email='zhujingdi1998@gmail.com', password='')
     print(login.is_login())
