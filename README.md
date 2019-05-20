@@ -14,6 +14,7 @@
 * [西刺](https://github.com/xiantang/Spider/tree/master/xici)
 * [知乎问题](https://github.com/xiantang/Spider/tree/master/zhihuq)
 * [推特](https://github.com/xiantang/Spider/blob/master/TweetApi/tweet.py)
+* [github](https://github.com/xiantang/Spider/tree/master/github)
 * [大众点评](https://github.com/xiantang/Spider/tree/master/rabbr)
 * [unitedstateszipcodes](https://github.com/xiantang/Spider/blob/master/excel_local/local_spider.py)
 * [破解js加密](https://github.com/xiantang/Spider/tree/master/Anti_Anti_Spider_521)
