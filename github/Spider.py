@@ -52,6 +52,6 @@ class Spider(object):
         self.get_follers("xiantang")
 
 if __name__ == '__main__':
-    spider = Spider(email='zhujingdi1998@gmail.com', password='19980424zjd.')
+    spider = Spider(email='zhujingdi1998@gmail.com', password='')
     # print(spider.is_login())
     spider.run()
