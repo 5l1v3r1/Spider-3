@@ -31,7 +31,7 @@
 * [破解js加密](https://github.com/xiantang/Spider/tree/master/Anti_Anti_Spider_521)
     * 使用exejs运行网页返回的js,获得cookie 并且携带cookie访问
 * [京东全站商品](https://github.com/xiantang/jdcrawler)
-    * 使用scrapy框架爬取所有分类页面，数据量2000这样，目前配合spring-boot搭建为监控平台
+    * 使用scrapy框架爬取所有分类页面，数据量2000W这样，目前配合spring-boot搭建为监控平台
 * [支持抓取HTTP|HTPPS的免费代理池](https://github.com/xiantang/proxy_pool_plus)
     * 免费的ip代理吃
 
