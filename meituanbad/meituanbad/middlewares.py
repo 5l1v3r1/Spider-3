@@ -84,7 +84,7 @@ class RandomHttpsProxyMiddleware(object):
         '''
         设置代理ip池
         '''
-        self.db = RedisClient('useful_proxy', '111.231.255.225', 6379)
+        self.db = RedisClient('useful_proxy', '', 6379)
 
     def process_request(self, request, spider):
         '''

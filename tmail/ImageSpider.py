@@ -8,7 +8,7 @@ import pymysql
 import traceback
 
 conn = pymysql.connect("url",
-                                    "root", "123456", "product")
+                                    "root", "", "product")
 cursor = conn.cursor()
 def download(img_name,img_url):
     try:

@@ -90,5 +90,5 @@ class RedisClient(object):
         return self.__conn.hexists(self.name,key)
 
 if __name__ == '__main__':
-    test=RedisClient('useful_proxy_http','111.231.255.225',6379)
+    test=RedisClient('useful_proxy_http','',6379)
     print(test.getAll())

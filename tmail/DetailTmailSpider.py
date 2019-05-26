@@ -11,7 +11,7 @@ class DetailTmailSpider():
     def __init__(self, json_path):
         self.driver = webdriver.Chrome()
         self.load_url_list(json_path)
-        self.conn = pymysql.connect("111.231.255.225",
+        self.conn = pymysql.connect("",
                                     "root", "123456", "product")
         self.cursor = self.conn.cursor()
         self.driver.set_page_load_timeout(15)

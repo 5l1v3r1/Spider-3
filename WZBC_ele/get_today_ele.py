@@ -3,7 +3,7 @@ import pymysql
 import  time
 def run():
     connect = pymysql.Connect(
-        host='111.231.255.225',
+        host='',
         port=3306,
         user='root',
         passwd='123456',

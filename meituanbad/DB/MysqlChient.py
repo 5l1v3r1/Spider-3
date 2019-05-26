@@ -1,7 +1,7 @@
 import pymysql
 class MysqlClient(object):
 
-    def __init__(self,db,host='111.231.255.225',port=3306):
+    def __init__(self,db,host='',port=3306):
         '''
 
         :param name:
